@@ -10,6 +10,12 @@ services:
   discountdb:
     image: postgres
 
+  orderdb:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+
   portainer:
     image: portainer/portainer-ce
 
@@ -34,10 +40,39 @@ services:
       context: .
       dockerfile: Services/Discount/Discount.API/Dockerfile
 
+  discount.grpc:
+    image: ${DOCKER_REGISTRY-}discountgrpc
+    build:
+      context: .
+      dockerfile: Services/Discount/Discount.Grpc/Dockerfile
+
+  ordering.api:
+    image: ${DOCKER_REGISTRY-}orderingapi
+    build:
+      context: .
+      dockerfile: Services/Ordering/Ordering.API/Dockerfile
+
+  ocelotapigw:
+    image: ${DOCKER_REGISTRY-}ocelotapigw
+    build:
+      context: .
+      dockerfile: ApiGateways/OcelotApiGw/Dockerfile
+
+  shopping.aggregrator:
+    image: ${DOCKER_REGISTRY-}shoppingaggregrator
+    build:
+      context: .
+      dockerfile: ApiGateways/Shopping.Aggregrator/Dockerfile
+
 volumes:
   mongo_data:
   portainer_data:
   postgres_data:
   pgadmin_data:
+  orderdb_data:
+
+
+
+
 
 
